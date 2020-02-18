@@ -20,14 +20,21 @@ import click  # import sys
 
 from bucket import BucketManager
 
-session = boto3.Session(profile_name='craquiest')
-bucket_manager = BucketManager(session)
+session = None
+bucket_manager = None
 
 
 @click.group()
-def cli():
+@click.option('--profile', default=None, help="Use a given profile.")
+def cli(profile):
     """Webotron deploys websites to AWS."""
-    pass
+    global session, bucket_manager
+    session_cfg = {}
+    if profile:
+        session_cfg["profile_name"] = profile
+
+    session = boto3.Session(**session_cfg)
+    bucket_manager = BucketManager(session)
 
 
 @cli.command('list-buckets')
