@@ -1,7 +1,11 @@
 # Lamine: add .vscode to .gitignore
 .vscode
+
 *.pem
+
 config.dev.json
+
+node_modules/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
