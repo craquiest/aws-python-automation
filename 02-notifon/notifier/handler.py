@@ -15,7 +15,8 @@ def post_to_slack(event, context):
     
     return 
 
-
+# requests==2.18.4
+# sodapy==1.4.6
 
 
 # def  hello(event, context):
