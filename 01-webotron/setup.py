@@ -1,14 +1,14 @@
 from setuptools import setup
 
 setup(
-    name='webotron-80',
-    version='0.1',
-    author='Robin Norwood',
-    author_email='robin@acloud.guru',
+    name='webotron-81',
+    version='0.2',
+    author='Lamine Gaye via Robin Norwood',
+    author_email='laminegaye@me.com',
     description='Webotron 80 is a tool to deploy static websites to AWS.',
     license='GPLv3+',
     packages=['webotron'],
-    url='https://github.com/ACloudGuru/automating-aws-with-python/tree/master/01-webotron',
+    url='https://github.com/craquiest/aws-python-automation/tree/master/01-webotron',
     install_requires=[
         'click',
         'boto3'

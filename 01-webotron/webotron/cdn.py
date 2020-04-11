@@ -63,8 +63,8 @@ class DistributionManager:
                         'QueryString': False,
                         'QueryStringCacheKeys': {'Quantity': 0}
                     },
-                    'DefaultTTL': 86400,
-                    'MinTTL': 3600
+                    'DefaultTTL': 60,#86400,
+                    'MinTTL': 0 #3600
                 },
                 'ViewerCertificate': {
                     'ACMCertificateArn': cert['CertificateArn'],
