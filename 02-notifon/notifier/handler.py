@@ -6,7 +6,15 @@ def post_to_slack(event, context):
     
     slack_webhook_url = os.environ['SLACK_WEBHOOK_URL']
     
-    slack_message = "From {source} at {detail[StartTime]}: {detail[Description]}".format(**event)
+    slack_message = "Something was done on AWS. "
+
+    if event:
+        if event.get('source',"")=="aws.autoscaling":
+            slack_message = "From {source} at {detail[StartTime]}: {detail[Description]}".format(**event)
+        else:
+            slack_message = slack_message + "With this data: " + str(event)
+
+
     data = {"text": slack_message}
     requests.post(slack_webhook_url, json=data)
 
