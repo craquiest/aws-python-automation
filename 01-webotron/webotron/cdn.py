@@ -17,7 +17,7 @@ class DistributionManager:
         """Find a dist matching domain_name."""
         paginator = self.client.get_paginator('list_distributions')
         for page in paginator.paginate():
-            print(page)
+            # print(page)
             for dist in page['DistributionList'].get('Items', []):
                 for alias in dist['Aliases']['Items']:
                     if alias == domain_name:
@@ -25,9 +25,17 @@ class DistributionManager:
 
         return None
 
-    def create_dist(self, domain_name, cert):
+    def create_dist(self, domain_name, cert, website_url):
         """Create a dist for domain_name using cert."""
+        #! Extra param 'website_url' to use as cdn origin
         origin_id = 'S3-' + domain_name
+
+        #! Lamine:  change Origins domain name to website_naked_url  i.o. bucket_domain_name
+        #! 'CustomOriginConfig' needs to be set, 'S3OriginConfig' no longer needed
+        bucket_domain_name = '{}.s3.amazonaws.com'.format(domain_name) # originally used in 'Origins'
+        print("CDN origin to be set to" + website_url)
+
+        #TODO: change Aliases to include www.domain_name and *.domain_name. Qty set to 3 from 1
 
         result = self.client.create_distribution(
             DistributionConfig={
@@ -44,9 +52,22 @@ class DistributionManager:
                     'Items': [{
                         'Id': origin_id,
                         'DomainName':
-                        '{}.s3.amazonaws.com'.format(domain_name),
-                        'S3OriginConfig': {
-                            'OriginAccessIdentity': ''
+                        website_url,
+                        # 'S3OriginConfig': {
+                        #     'OriginAccessIdentity': ''
+                        # },
+                        'CustomOriginConfig': {
+                            'HTTPPort': 80,
+                            'HTTPSPort': 443,
+                            'OriginProtocolPolicy': 'http-only',
+                            # 'OriginSslProtocols': {
+                            #     'Quantity': 1,
+                            #     'Items': [
+                            #         'TLSv1.1'
+                            #     ]
+                            # }#,
+                            # 'OriginReadTimeout': 123,
+                            # 'OriginKeepaliveTimeout': 123
                         }
                     }]
                 },

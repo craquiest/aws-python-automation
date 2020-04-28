@@ -46,6 +46,15 @@ class BucketManager:
             util.get_endpoint(self.get_region_name(bucket)).host
         )
 
+    def get_bucket_naked_url(self, bucket):
+        """Get the website URL for this bucket without https:// ."""
+        #! Lamine: Cloned from 'get_bucket_url' for use in cdn settings
+        return "{}.{}".format(
+            bucket.name,
+            util.get_endpoint(self.get_region_name(bucket)).host
+        )
+    
+
     def all_buckets(self):
         """Get an iterator for all buckets."""
         return self.s3.buckets.all()

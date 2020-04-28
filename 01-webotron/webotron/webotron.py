@@ -5,7 +5,7 @@
 
 As per acloud.guru course AWS Automation with Python.
 
-Webotron automates the proceess of deployiing static websites on AWS.
+Webotron automates the process of deploying static websites on AWS.
 - Configure AWS S3 buckets
   - Create them
   - Set them up for static website hosting
@@ -110,13 +110,19 @@ def setup_cdn(domain, bucket):
     """Set up CloudFront CDN for DOMAIN pointing to BUCKET."""
     dist = dist_manager.find_matching_dist(domain)
 
+    #! Configure to set S3 website endpoint as Origin for cdn
+    bucket_obj = bucket_manager.get_bucket(bucket)
+    #! Use new method in bucket manager to get url without 'https://'
+    website_url = bucket_manager.get_bucket_naked_url(bucket_obj)
+
     if not dist:
         cert = cert_manager.find_matching_cert(domain)
         if not cert:  # SSL is not optional at this time
             print("Error: No matching cert found.")
             return
 
-        dist = dist_manager.create_dist(domain, cert)
+        #! Add extra param 'website_url' so that dist_manager can use 
+        dist = dist_manager.create_dist(domain, cert, website_url)
         print("Waiting for distribution deployment...")
         dist_manager.await_deploy(dist)
 
